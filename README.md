@@ -20,7 +20,8 @@ Repositorio con todas las clases y ejemplos del curso intensivo de Java. Cada ar
 | 7 | [Bucles](#7-bucles) | `Bucle_For`, `Bucle_While`, `Bucle_Do_While`, `Break_Continue` |
 | 8 | [Ejercicios de bucles](#8-ejercicios-de-bucles) | `For_Ejercicio`, `While_Ejercicio` |
 | 9 | [Clase Math](#9-clase-math) | `Clase_Math` |
-| 10 | [Arreglos (Arrays)](#10-arreglos-arrays) | `Arreglos_Enteros`, `Arreglos_caracteres` |
+| 10 | [Arreglos (Arrays)](#10-arreglos-arrays) | `Arreglos_Enteros`, `Arreglos_caracteres`, `Arreglos_Bucles`, `Arreglos_Combinacion`, `Arreglos_Mayor_Valor`, `Arreglos_Metodos`, `Arreglos_Operaciones` |
+| 11 | [Matrices](#11-matrices) | `Matrices`, `Matrices_For` |
 
 ---
 
@@ -347,6 +348,119 @@ Arrays.sort(productos);  // Ordena alfabéticamente
 ```
 
 > Para usar `Arrays.sort()` hay que importar `java.util.Arrays`.
+
+### `Arreglos_Bucles.java` — Recorrer arrays con bucles
+Muestra cómo iterar un array con `for` y con `while`.
+```java
+String[] productos = {"Martillo", "Destornillador", "Taladro", "Llave Inglesa", "Pinzas"};
+
+// Con for
+for (int i = 0; i < productos.length; i++) {
+    System.out.println("Producto Nro. " + (i + 1) + ": " + productos[i]);
+}
+
+// Con while
+int f = 0;
+while (productos.length > f) {
+    System.out.println("Producto Nro. " + (f + 1) + ": " + productos[f]);
+    f++;
+}
+```
+> Usar `i + 1` al imprimir evita que el índice arranque desde 0 visualmente.
+
+### `Arreglos_Combinacion.java` — Combinar dos arrays con condiciones
+Recorre dos arrays en paralelo (productos y precios) y aplica lógica condicional en cada iteración.
+```java
+String[] productos = {"Martillo", "Destornillador", "Taladro", "Llave Inglesa", "Pinzas"};
+double[] precios   = {12.50, 10.20, 200.00, 40.20, 5.40};
+
+for (int i = 0; i < productos.length; i++) {
+    if (precios[i] < 100) {
+        System.out.println(productos[i] + ": $" + precios[i] + " - No paga impuestos.");
+    } else {
+        System.out.println(productos[i] + ": $" + precios[i] + " - Paga impuestos.");
+    }
+}
+```
+
+### `Arreglos_Mayor_Valor.java` — Encontrar el mayor valor
+El usuario ingresa 5 números; el programa va comparando en cada vuelta del `for` si el número ingresado supera al mayor actual.
+```java
+int mayor = 0;
+for (int i = 0; i < 5; i++) {
+    numeros[i] = entrada.nextInt();
+    if (numeros[i] > mayor) {
+        mayor = numeros[i];
+    }
+}
+System.out.println("El mayor es: " + mayor);
+```
+
+### `Arreglos_Metodos.java` — Métodos de la clase `Arrays`
+
+| Método | Descripción | Ejemplo |
+|--------|-------------|---------|
+| `Arrays.toString(arr)` | Convierte el array a texto legible | `[3, 2, 6, 4]` |
+| `Arrays.sort(arr)` | Ordena el array (asc) | `[1, 2, 3, 4]` |
+| `Arrays.equals(a, b)` | Compara dos arrays elemento a elemento | `true` / `false` |
+| `Arrays.fill(arr, val)` | Llena todo el array con el mismo valor | `[1, 1, 1, 1, 1]` |
+| `Arrays.copyOf(arr, len)` | Copia el array con nueva longitud | posiciones extras quedan en `0` |
+
+```java
+int[] original = {1, 2, 3};
+int[] copia = Arrays.copyOf(original, original.length + 2);
+// copia → [1, 2, 3, 0, 0]
+```
+
+### `Arreglos_Operaciones.java` — Operaciones aritméticas entre arrays
+Opera dos arrays de ventas en paralelo: suma y resta posición a posición, acumulando el total.
+```java
+int[] ventas1 = {110, 320, 280, 150, 210};
+int[] ventas2 = {550, 830, 300, 650, 380};
+
+for (int i = 0; i < ventas1.length; i++) {
+    totalVentas[i] = ventas1[i] + ventas2[i];
+    suma += totalVentas[i];
+}
+System.out.println("Total: " + suma);
+```
+
+---
+
+## 11. Matrices
+
+### `Matrices.java` — Matrices bidimensionales
+Una matriz es un array de arrays: se declara con `tipo[filas][columnas]`.
+```java
+int[][] numeros = new int[3][3];
+
+// Llenar celda por celda
+numeros[0][0] = 1;  numeros[0][1] = 0;  numeros[0][2] = 0;
+numeros[1][0] = 0;  numeros[1][1] = 1;  numeros[1][2] = 0;
+numeros[2][0] = 0;  numeros[2][1] = 0;  numeros[2][2] = 1;
+
+// Acceder: numeros[fila][columna]
+System.out.println(numeros[0][0]); // 1
+```
+**Ejercicio del archivo:** representa el tablero de ta-te-ti (Tic-Tac-Toe) con `1` en la diagonal principal → situación de victoria.
+
+### `Matrices_For.java` — Recorrer matrices con `for` anidado
+Inicialización literal y recorrido con dos `for` anidados: el externo maneja filas, el interno columnas.
+```java
+int[][] cantidades = {
+    {10, 20, 80},
+    {50, 70, 40},
+    {20, 40, 90}
+};
+
+for (int fila = 0; fila < cantidades.length; fila++) {
+    for (int columna = 0; columna < cantidades[fila].length; columna++) {
+        System.out.print(cantidades[fila][columna] + " ");
+    }
+    System.out.println();
+}
+```
+> Usar `cantidades[fila].length` en el for interno es más robusto que `cantidades.length` si la matriz no es cuadrada.
 
 ---
 
