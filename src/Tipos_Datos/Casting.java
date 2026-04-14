@@ -1,3 +1,5 @@
+package Tipos_Datos;
+
 public class Casting {
     static void main(String[] args) {
         // De texto a entero string to integer

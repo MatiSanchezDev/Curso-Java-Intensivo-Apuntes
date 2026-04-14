@@ -1,3 +1,5 @@
+package Condicionales;
+
 public class Condicional_If_Not {
     static void main(String[] args) {
         System.out.println("==== MONITOREO EL SISTEMA ====");

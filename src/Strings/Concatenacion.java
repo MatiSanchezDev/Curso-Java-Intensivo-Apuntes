@@ -1,3 +1,5 @@
+package Strings;
+
 public class Concatenacion {
     static void main(String[] args) {
         String nombre = "Homero", apellido = "Simpson";

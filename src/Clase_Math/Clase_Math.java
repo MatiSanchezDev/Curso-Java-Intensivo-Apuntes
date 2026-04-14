@@ -1,3 +1,5 @@
+package Clase_Math;
+
 import java.util.Scanner;
 
 public class Clase_Math {

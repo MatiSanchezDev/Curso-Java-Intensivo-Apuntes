@@ -1,3 +1,5 @@
+package Condicionales;
+
 import java.util.Scanner;
 
 public class Condicional_Switch {

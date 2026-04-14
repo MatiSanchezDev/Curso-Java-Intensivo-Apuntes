@@ -1,3 +1,5 @@
+package Fundamentos;
+
 public class Comentarios {
     static void main(String[] args) {
         String canal, curso, proposito;

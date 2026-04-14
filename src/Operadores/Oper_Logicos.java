@@ -1,3 +1,5 @@
+package Operadores;
+
 public class Oper_Logicos {
     static void main(String[] args) {
         boolean a = true, b = false;

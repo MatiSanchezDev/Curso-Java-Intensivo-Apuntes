@@ -1,3 +1,5 @@
+package Bucles;
+
 import javax.swing.*;
 
 public class While_Ejercicio {

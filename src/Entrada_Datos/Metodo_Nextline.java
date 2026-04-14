@@ -1,3 +1,5 @@
+package Entrada_Datos;
+
 import java.util.Scanner;
 
 public class Metodo_Nextline {

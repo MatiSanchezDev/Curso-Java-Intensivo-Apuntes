@@ -1,3 +1,5 @@
+package Fundamentos;
+
 public class Variables {
     static void main(String[] args) {
         String Nombre = "Hola a todos";

@@ -1,3 +1,5 @@
+package Fundamentos;
+
 public class Costantes {
     static void main(String[] args) {
         // las variables constates se inicializan con la palabra final

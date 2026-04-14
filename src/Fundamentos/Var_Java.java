@@ -1,3 +1,5 @@
+package Fundamentos;
+
 public class Var_Java {
     static void main(String[] args) {
         var nombre = "Mattdev";

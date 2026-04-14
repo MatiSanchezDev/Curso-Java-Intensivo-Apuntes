@@ -1,3 +1,5 @@
+package Entrada_Datos;
+
 import javax.swing.*;
 
 public class Input_Dato_2 {

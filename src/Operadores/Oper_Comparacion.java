@@ -1,3 +1,5 @@
+package Operadores;
+
 public class Oper_Comparacion {
     static void main(String[] args) {
         int valor1 = 90, valor2 = 50; //Esto se conoce como programación lineal.

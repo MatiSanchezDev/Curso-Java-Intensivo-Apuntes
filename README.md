@@ -3,7 +3,21 @@
 Repositorio con todas las clases y ejemplos del curso intensivo de Java. Cada archivo `.java` cubre un tema específico con ejemplos comentados listos para ejecutar.
 
 > **Entorno:** IntelliJ IDEA · Java 17+  
-> **Estructura:** todos los fuentes están en `src/`
+> **Estructura:** fuentes en `src/`, organizados por paquete temático
+
+```
+src/
+├── Fundamentos/       # Saludo, Comentarios, Variables, Var_Java, Costantes
+├── Tipos_Datos/       # Casting
+├── Operadores/        # Oper_Aritmeticos, Oper_Comparacion, Oper_incremento, Oper_Logicos
+├── Strings/           # Concatenacion, Clase_String
+├── Entrada_Datos/     # Input_Datos, Input_Dato_2, Metodo_Nextline
+├── Condicionales/     # Condicional_If_*, Condicional_Switch*
+├── Bucles/            # Bucle_*, Break_Continue, For_Ejercicio, While_Ejercicio
+├── Clase_Math/        # Clase_Math
+├── Arreglos/          # Arreglos_*, Matrices*
+└── POO/               # Automoviles
+```
 
 ---
 
