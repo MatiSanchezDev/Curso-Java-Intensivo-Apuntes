@@ -16,7 +16,13 @@ src/
 ├── Bucles/            # Bucle_*, Break_Continue, For_Ejercicio, While_Ejercicio
 ├── Clase_Math/        # Clase_Math
 ├── Arreglos/          # Arreglos_*, Matrices*
-└── POO/               # Automoviles
+├── Java_Time/         # Calendario, Tiempo
+├── POO/
+│   ├── Clases/        # Automoviles, Persona, Alumnos, Auto, Metodos_*, Palabra_This, Principal
+│   ├── Encapsulacion/ # Ejemplo1_Public, Ejemplo2_Protected, Ejemplo3_Private, Ejemplo_Default
+│   └── Inmutabilidad/ # Persona
+└── Practicas/
+    └── Cajero/        # Cajero
 ```
 
 ---
@@ -36,6 +42,11 @@ src/
 | 9 | [Clase Math](#9-clase-math) | `Clase_Math` |
 | 10 | [Arreglos (Arrays)](#10-arreglos-arrays) | `Arreglos_Enteros`, `Arreglos_caracteres`, `Arreglos_Bucles`, `Arreglos_Combinacion`, `Arreglos_Mayor_Valor`, `Arreglos_Metodos`, `Arreglos_Operaciones` |
 | 11 | [Matrices](#11-matrices) | `Matrices`, `Matrices_For` |
+| 12 | [POO — Clases y Objetos](#12-poo--clases-y-objetos) | `Automoviles`, `Persona`, `Alumnos`, `Auto`, `Metodos_Parametros`, `Metodos_Parametros_String`, `Palabra_This`, `Principal` |
+| 13 | [POO — Encapsulación](#13-poo--encapsulación) | `Ejemplo_Default`, `Ejemplo1_Public`, `Ejemplo2_Protected`, `Ejemplo3_Private` |
+| 14 | [POO — Inmutabilidad](#14-poo--inmutabilidad) | `Persona` |
+| 15 | [Java Time](#15-java-time) | `Calendario`, `Tiempo` |
+| 16 | [Prácticas](#16-prácticas) | `Cajero` |
 
 ---
 
@@ -475,6 +486,253 @@ for (int fila = 0; fila < cantidades.length; fila++) {
 }
 ```
 > Usar `cantidades[fila].length` en el for interno es más robusto que `cantidades.length` si la matriz no es cuadrada.
+
+---
+
+## 12. POO — Clases y Objetos
+
+### `Automoviles.java` — Primera clase: atributos e instancias
+Introduce el concepto de clase como molde para crear objetos. Define atributos y muestra cómo instanciar con `new`.
+```java
+public class Automoviles {
+    String marca = "Honda";
+    String model = "CRV";
+    int anio = 2026;
+    boolean camara = true;
+}
+
+Automoviles auto1 = new Automoviles();
+System.out.println(auto1.marca); // Honda
+```
+
+### `Persona.java` — Atributos + métodos get/set
+Clase con atributos primitivos y métodos que devuelven o procesan datos.
+```java
+class Persona {
+    String nombre = "José";
+    int edad = 30;
+
+    String Saludo()    { return "Hola a todos"; }
+    String DimeNombre(){ return nombre + " Está aprendiendo java"; }
+    void   DimePeso()  { /* lógica condicional */ }
+}
+```
+
+### `Alumnos.java` — Constructor sin parámetros
+Demuestra el **método constructor**: se ejecuta automáticamente al crear el objeto y le da valores iniciales.
+```java
+public Alumnos() {
+    nombre     = "Matias";
+    asignatura = "Lengua";
+    nota       = 80;
+}
+```
+
+### `Auto.java` — Constructor con y sin parámetros + imports
+Dos constructores en la misma clase: uno sin parámetros (valores por defecto) y otro con parámetros. También muestra cómo importar otra clase del proyecto.
+```java
+public Auto() { marca = "Toyota"; modelo = "Corolla"; anio = 2026; }
+
+public Auto(String marca, String modelo, int anio) {
+    this.marca  = marca;
+    this.modelo = modelo;
+    this.anio   = anio;
+}
+```
+> `import POO.Clases.Alumnos;` — importar una clase propia. `import java.util.*;` — importar todo un paquete.
+
+### `Metodos_Parametros.java` — Métodos con parámetros numéricos
+Clase calculadora: métodos que reciben parámetros y retornan resultados. Incluye validación de división por cero.
+```java
+int    Suma(int a, int b)              { return a + b; }
+int    Restar(int a, int b)            { return a - b; }
+int    Multiplicacion(int a, int b, int c) { return a * b * c; }
+double Dividir(int a, int b)           { return b != 0 ? a / b : 0; }
+double Potencia(double base, double exp){ return Math.pow(base, exp); }
+```
+
+### `Metodos_Parametros_String.java` — Métodos con parámetros String
+Método que recibe nombre y edad como parámetros y los imprime. Muestra cómo crear varios objetos de la misma clase.
+```java
+void DameDatos(String nombre, int edad) {
+    System.out.println("Nombre: " + nombre + "\nEdad: " + edad);
+}
+```
+
+### `Palabra_This.java` — La palabra reservada `this`
+`this` hace referencia al atributo de la clase cuando hay ambigüedad con el parámetro del método.
+```java
+String nombre = "Maria";
+
+String DimeNombre(String nombre) {
+    this.nombre = nombre; // this.nombre = atributo de clase
+    return nombre;
+}
+```
+
+### `Principal.java` — Colaboración entre clases
+Un mismo archivo define dos clases (`Cliente` y `Prestamo`) que trabajan juntas, cada una con su constructor. Demuestra el patrón de **colaboración entre objetos**.
+```java
+Cliente  persona  = new Cliente(entrada.next());
+Prestamo deposito = new Prestamo(entrada.nextDouble());
+persona.dimeNombre();
+deposito.analizaCuota(); // valida si se canceló o queda saldo pendiente
+```
+
+---
+
+## 13. POO — Encapsulación
+
+Los modificadores de acceso controlan **desde dónde** se puede acceder a un atributo o método.
+
+| Modificador | Misma clase | Mismo paquete | Subclases | Otro paquete |
+|-------------|:-----------:|:-------------:|:---------:|:------------:|
+| `private`   | ✅ | ❌ | ❌ | ❌ |
+| *(default)* | ✅ | ✅ | ❌ | ❌ |
+| `protected` | ✅ | ✅ | ✅ | ❌ |
+| `public`    | ✅ | ✅ | ✅ | ✅ |
+
+### `Ejemplo_Default/` — Acceso sin modificador (default)
+Atributos y métodos sin modificador solo son visibles dentro del **mismo paquete**.
+```java
+// Animales.java
+String nombre, raza;  // default — accesible en el mismo package
+void Datos() { ... }
+
+// Perro.java (mismo package)
+Animales perro1 = new Animales();
+perro1.nombre = "Clarita"; // ✅ funciona
+```
+
+### `Ejemplo1_Public/` — Acceso `public` entre paquetes
+Para que un método sea accesible desde **otro paquete**, debe ser `public` en su clase (no basta con importar).
+```java
+// Otro_Package/Persona.java
+public void dimeNombre() { ... } // public → accesible desde cualquier package
+
+// Principal.java (otro package)
+import POO.Encapsulacion.Ejemplo1_Public.Otro_Package.Persona;
+Persona p = new Persona();
+p.dimeNombre(); // ✅ funciona porque es public
+```
+
+### `Ejemplo2_Protected/` — Acceso `protected`
+`protected` permite acceso desde el mismo paquete y desde **subclases**, pero no desde paquetes externos sin herencia.
+```java
+// Paquete1/Animal.java
+protected String nombreProtegido = "Pelusa"; // paquete + subclases
+protected void camina() { ... }
+public    void maulla() { ... }
+
+// Paquete2/Gato.java (otro package, sin herencia)
+Animal gato1 = new Animal();
+gato1.maulla();      // ✅ es public
+// gato1.camina();   // ❌ es protected, no hereda
+```
+
+### `Ejemplo3_Private/` — Acceso `private`
+`private` restringe el acceso solo a la **propia clase**. Ni siquiera otras clases del mismo paquete pueden acceder.
+```java
+// Vehiculos.java
+private String marca = "Audi";
+private int    anio  = 2026;
+
+void datosVehiculos() {
+    System.out.println(marca + " " + anio); // ✅ dentro de la misma clase
+}
+
+// Otra clase: tipo1.tipo1 → ❌ ERROR: atributo private
+```
+
+---
+
+## 14. POO — Inmutabilidad
+
+### `Persona.java` — Clase inmutable con `final`
+Una clase es **inmutable** cuando su estado no puede cambiar tras la construcción. Se logra con `final` en la clase y sus atributos, y solo exponiendo getters (sin setters).
+```java
+public final class Persona {
+    private final String nombre;
+    private final int    edad;
+    protected final double sueldo;
+
+    Persona(String nombre, int edad, double sueldo) {
+        this.nombre = nombre;
+        this.edad   = edad;
+        this.sueldo = sueldo;
+    }
+
+    public String dimeNombre() { return nombre; }
+    public int    dimeEdad()   { return edad;   }
+    public double dimeSueldo() { return sueldo; }
+}
+```
+> `final class` → no se puede extender (heredar).  
+> `final` en atributos → no se puede reasignar después del constructor.
+
+---
+
+## 15. Java Time
+
+### `Calendario.java` — Fechas con `LocalDate`
+```java
+import java.time.LocalDate;
+
+LocalDate hoy    = LocalDate.now();           // fecha actual
+LocalDate fecha2 = LocalDate.of(2021, 7, 14); // fecha específica
+
+// Extraer componentes
+int dia  = hoy.getDayOfMonth();
+int mes  = hoy.getMonthValue();
+int anio = hoy.getYear();
+
+// Sumar / restar
+LocalDate proxSemana  = hoy.plusWeeks(1);
+LocalDate mesPasado   = hoy.minusMonths(1);
+```
+
+### `Tiempo.java` — Horas con `LocalTime`
+```java
+import java.time.LocalTime;
+
+LocalTime ahora = LocalTime.now();           // hora actual
+LocalTime hora2 = LocalTime.of(14, 40, 0);  // hora específica
+
+// Extraer componentes
+int hh = ahora.getHour();
+int mm = ahora.getMinute();
+int ss = ahora.getSecond();
+
+// Sumar / restar
+LocalTime en2h    = ahora.plusHours(2);
+LocalTime menos30 = ahora.minusMinutes(30);
+```
+
+---
+
+## 16. Prácticas
+
+### `Cajero.java` — Simulador de cajero automático
+Práctica integradora que combina: constructor, métodos, `Scanner`, `while`, `switch` y `System.exit()`.
+
+**Funcionalidades:**
+- Validación de PIN con máximo **3 intentos** (bloqueo automático)
+- Menú con 4 opciones: consultar balance, retirar, depositar, salir
+- Máximo **3 transacciones** por sesión
+- Control de opciones inválidas en el menú (bloqueo tras 3 errores)
+
+```java
+public Cajero() {
+    clave   = 2020;
+    balance = 10000.00;
+    // verifica PIN → si OK, llama a MenuOpciones()
+}
+
+public void Retirar() {
+    // valida que retiro <= balance antes de descontar
+    balance = balance - retiro;
+}
+```
 
 ---
 

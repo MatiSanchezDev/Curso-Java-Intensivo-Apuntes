@@ -1,4 +1,4 @@
-package POO;
+package POO.Clases;
 // Creando una nueva clase
 public class Automoviles {
 
@@ -16,6 +16,8 @@ public class Automoviles {
         // Instanciar una clase
         Automoviles auto1 = new Automoviles();
         Automoviles auto2 = new Automoviles();
+
+        // Consultar valores de un objeto
         System.out.println("Marca: " + auto1.marca);
         System.out.println("Modelo: " + auto1.model);
         System.out.println("año: " + auto1.anio);
