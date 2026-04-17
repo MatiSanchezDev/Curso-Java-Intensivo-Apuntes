@@ -7,22 +7,28 @@ Repositorio con todas las clases y ejemplos del curso intensivo de Java. Cada ar
 
 ```
 src/
-├── Fundamentos/       # Saludo, Comentarios, Variables, Var_Java, Costantes
-├── Tipos_Datos/       # Casting
-├── Operadores/        # Oper_Aritmeticos, Oper_Comparacion, Oper_incremento, Oper_Logicos
-├── Strings/           # Concatenacion, Clase_String
-├── Entrada_Datos/     # Input_Datos, Input_Dato_2, Metodo_Nextline
-├── Condicionales/     # Condicional_If_*, Condicional_Switch*
-├── Bucles/            # Bucle_*, Break_Continue, For_Ejercicio, While_Ejercicio
-├── Clase_Math/        # Clase_Math
-├── Arreglos/          # Arreglos_*, Matrices*
-├── Java_Time/         # Calendario, Tiempo
+├── Fundamentos/          # Saludo, Comentarios, Variables, Var_Java, Costantes
+├── Tipos_Datos/          # Casting
+├── Operadores/           # Oper_Aritmeticos, Oper_Comparacion, Oper_incremento, Oper_Logicos
+├── Strings/              # Concatenacion, Clase_String
+├── Entrada_Datos/        # Input_Datos, Input_Dato_2, Metodo_Nextline
+├── Condicionales/        # Condicional_If_*, Condicional_Switch*
+├── Bucles/               # Bucle_*, Break_Continue, For_Ejercicio, While_Ejercicio
+├── Clase_Math/           # Clase_Math
+├── Arreglos/             # Arreglos_*, Matrices*
+├── Java_Time/            # Calendario, Tiempo
+├── Metodos_Estaticos/    # Metodos_Estaticos
+├── Enums/                # Enumerada
 ├── POO/
-│   ├── Clases/        # Automoviles, Persona, Alumnos, Auto, Metodos_*, Palabra_This, Principal
-│   ├── Encapsulacion/ # Ejemplo1_Public, Ejemplo2_Protected, Ejemplo3_Private, Ejemplo_Default
-│   └── Inmutabilidad/ # Persona
-└── Practicas/
-    └── Cajero/        # Cajero
+│   ├── Clases/           # Automoviles, Persona, Alumnos, Auto, Metodos_*, Palabra_This, Principal
+│   ├── Encapsulacion/    # Ejemplo1_Public, Ejemplo2_Protected, Ejemplo3_Private, Ejemplo_Default
+│   ├── Inmutabilidad/    # Persona
+│   ├── Herencia/         # Vehiculo, Principal
+│   └── Polimorfismo/     # Animal, Principal
+├── Recursividad/         # Factorial
+├── Practicas/
+│   └── Cajero/           # Cajero
+└── UML_Proyect_Umbrello/ # Automovil, Motor, Persona, Ruedas
 ```
 
 ---
@@ -47,6 +53,12 @@ src/
 | 14 | [POO — Inmutabilidad](#14-poo--inmutabilidad) | `Persona` |
 | 15 | [Java Time](#15-java-time) | `Calendario`, `Tiempo` |
 | 16 | [Prácticas](#16-prácticas) | `Cajero` |
+| 17 | [Métodos Estáticos](#17-métodos-estáticos) | `Metodos_Estaticos` |
+| 18 | [Enumeraciones (Enum)](#18-enumeraciones-enum) | `Enumerada` |
+| 19 | [POO — Herencia](#19-poo--herencia) | `Vehiculo`, `Principal` |
+| 20 | [POO — Polimorfismo](#20-poo--polimorfismo) | `Animal`, `Principal` |
+| 21 | [Recursividad](#21-recursividad) | `Factorial` |
+| 22 | [UML con Umbrello](#22-uml-con-umbrello) | `Automovil`, `Motor`, `Persona`, `Ruedas` |
 
 ---
 
@@ -733,6 +745,182 @@ public void Retirar() {
     balance = balance - retiro;
 }
 ```
+
+---
+
+## 17. Métodos Estáticos
+
+### `Metodos_Estaticos.java` — Métodos `static`
+Un método `static` pertenece a la **clase**, no a una instancia. Se puede llamar directamente con `NombreClase.metodo()` sin necesidad de crear un objeto con `new`.
+```java
+class Matematica {
+    public static int suma(int a, int b) {
+        return a + b;
+    }
+}
+
+// No necesito instanciar Matematica
+int resultado = Matematica.suma(5, 3); // 8
+```
+> Dentro de un método estático **no se puede usar `this`** porque no existe instancia de referencia.
+
+---
+
+## 18. Enumeraciones (Enum)
+
+### `Enumerada.java` — Definición y recorrido de un `enum`
+Un `enum` define un conjunto fijo de constantes con nombre. Es más seguro que usar enteros o Strings para representar valores discretos.
+```java
+enum diasSemana {
+    Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo
+}
+
+diasSemana hoy = diasSemana.Viernes;
+
+// Recorrer todos los valores con for-each
+for (diasSemana dia : diasSemana.values()) {
+    System.out.println(dia);
+}
+```
+> `diasSemana.values()` retorna un array con todas las constantes del enum en orden de declaración.
+
+---
+
+## 19. POO — Herencia
+
+### `Vehiculo.java` + `Principal.java` — Herencia con `extends` y `super`
+La **herencia** permite que una subclase reutilice atributos y métodos de una clase padre. Se usa `extends` para declarar la relación y `super()` para invocar el constructor del padre.
+
+```java
+public class Vehiculo {
+    String marca, modelo;
+    int anio;
+
+    public Vehiculo(String marca, String modelo, int anio) {
+        this.marca  = marca;
+        this.modelo = modelo;
+        this.anio   = anio;
+    }
+
+    public void dameInfo() {
+        System.out.println("Marca: " + marca + " Modelo: " + modelo + " Año: " + anio);
+    }
+}
+
+class Carro extends Vehiculo {
+    int ruedas;
+
+    public Carro(String marca, String modelo, int anio) {
+        super(marca, modelo, anio); // hereda el constructor del padre
+        this.ruedas = 4;
+    }
+
+    public void dameInfo() {
+        System.out.println("Información del carro");
+        super.dameInfo(); // llama al método del padre
+        System.out.println("Ruedas: " + ruedas);
+    }
+}
+```
+
+**Subclases del ejemplo:** `Carro` (4 ruedas) y `Moto` (2 ruedas), ambas heredan de `Vehiculo`.
+
+> Solo los atributos pasados al constructor de la clase padre participan en la herencia. Atributos como `fecha_fabricacion` que no están en el constructor padre **no se heredan automáticamente**.
+
+---
+
+## 20. POO — Polimorfismo
+
+### `Animal.java` + `Principal.java` — Sobreescritura de métodos
+El **polimorfismo** permite que subclases redefinan métodos de la clase padre para tener comportamiento propio. Cuando hay conflicto de nombres entre padre e hijo se usa `super.metodo()` para llamar al del padre.
+
+```java
+public class Animal {
+    void sonido() {
+        System.out.println("Sonido de animal");
+    }
+}
+
+class Perro extends Animal {
+    void sonido() {
+        System.out.println("El perro ladra"); // reemplaza al del padre
+    }
+}
+
+class Gato extends Animal {
+    void sonido() {
+        super.sonido();                        // ejecuta el del padre primero
+        System.out.println("El gato maulla");
+    }
+}
+```
+
+```java
+// En Principal.java
+Animal animal1 = new Animal(); animal1.sonido(); // Sonido de animal
+Perro  elPerro = new Perro();  elPerro.sonido(); // El perro ladra
+Gato   elGato  = new Gato();   elGato.sonido();  // Sonido de animal + El gato maulla
+```
+
+---
+
+## 21. Recursividad
+
+### `Factorial.java` — Función recursiva
+Una función **recursiva** se llama a sí misma para resolver un problema dividiéndolo en casos más pequeños. Siempre necesita un **caso base** que detenga la recursión.
+
+```java
+public int factorial(int n) {
+    if (n == 0) {
+        return 1;        // caso base: 0! = 1
+    }
+    return n * factorial(n - 1); // caso recursivo
+}
+```
+
+**Traza de `factorial(5)`:**
+```
+5 → 5 * factorial(4)
+4 → 4 * factorial(3)
+3 → 3 * factorial(2)
+2 → 2 * factorial(1)
+1 → 1 * factorial(0)
+0 → 1 (caso base)
+Resultado: 5 * 4 * 3 * 2 * 1 * 1 = 120
+```
+
+> Si no se define el caso base correctamente, la recursión cae en **StackOverflowError**.
+
+---
+
+## 22. UML con Umbrello
+
+### `Automovil`, `Motor`, `Persona`, `Ruedas` — Clases generadas desde diagrama UML
+Ejemplo de flujo **diseño → código**: las clases de este paquete se diseñaron primero como diagrama UML en **Umbrello** y luego se generó el código Java automáticamente.
+
+```java
+public class Automovil { public Automovil() {} }
+
+public class Motor {
+    private String marca;
+    private int    capacidad;
+    public Motor() {}
+}
+
+public class Ruedas {
+    private String fabricante;
+    private String tipo;
+    public Ruedas() {}
+}
+
+public class Persona {
+    private String nombre;
+    private int    edad;
+    public Persona() {}
+}
+```
+
+> Umbrello genera el esqueleto de cada clase (atributos privados + constructor vacío). La lógica de métodos se completa manualmente luego.
 
 ---
 
