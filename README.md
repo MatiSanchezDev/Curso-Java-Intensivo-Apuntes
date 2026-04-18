@@ -18,14 +18,17 @@ src/
 ├── Arreglos/             # Arreglos_*, Matrices*
 ├── Java_Time/            # Calendario, Tiempo
 ├── Metodos_Estaticos/    # Metodos_Estaticos
+├── Metodos/              # MetodoVarArgs
 ├── Enums/                # Enumerada
 ├── POO/
 │   ├── Clases/           # Automoviles, Persona, Alumnos, Auto, Metodos_*, Palabra_This, Principal
 │   ├── Encapsulacion/    # Ejemplo1_Public, Ejemplo2_Protected, Ejemplo3_Private, Ejemplo_Default
 │   ├── Inmutabilidad/    # Persona
 │   ├── Herencia/         # Vehiculo, Principal
-│   └── Polimorfismo/     # Animal, Principal
+│   ├── Polimorfismo/     # Animal, Principal
+│   └── Abstracta/        # Abstracta
 ├── Recursividad/         # Factorial
+├── excepciones/          # DivisionCero, ErrorEntero, ErrorTexto, MultiExcepciones, Try_Catch_Finally
 ├── Practicas/
 │   └── Cajero/           # Cajero
 └── UML_Proyect_Umbrello/ # Automovil, Motor, Persona, Ruedas
@@ -59,6 +62,9 @@ src/
 | 20 | [POO — Polimorfismo](#20-poo--polimorfismo) | `Animal`, `Principal` |
 | 21 | [Recursividad](#21-recursividad) | `Factorial` |
 | 22 | [UML con Umbrello](#22-uml-con-umbrello) | `Automovil`, `Motor`, `Persona`, `Ruedas` |
+| 23 | [Métodos VarArgs](#23-métodos-varargs) | `MetodoVarArgs` |
+| 24 | [POO — Clases Abstractas](#24-poo--clases-abstractas) | `Abstracta` |
+| 25 | [Excepciones](#25-excepciones) | `DivisionCero`, `ErrorEntero`, `ErrorTexto`, `MultiExcepciones`, `Try_Catch_Finally` |
 
 ---
 
@@ -921,6 +927,146 @@ public class Persona {
 ```
 
 > Umbrello genera el esqueleto de cada clase (atributos privados + constructor vacío). La lógica de métodos se completa manualmente luego.
+
+---
+
+## 23. Métodos VarArgs
+
+### `MetodoVarArgs.java` — Parámetros variables con `...`
+`VarArgs` (variable arguments) permite que un método acepte **cualquier cantidad de argumentos** del mismo tipo. Java los trata internamente como un array.
+
+```java
+public void ImprimeNumeros(String mensaje, int... numeros) {
+    System.out.println(mensaje);
+
+    // numeros es un array → recorrer con for-each
+    System.out.print("Valores: ");
+    for (int i : numeros) {
+        System.out.print(i + " ");
+    }
+}
+
+// Llamadas válidas:
+valores.ImprimeNumeros("Texto", 10, 20);
+valores.ImprimeNumeros("Texto", 10, 20, 30, 40, 50, 60);
+```
+
+> Usar `System.out.println(numeros)` imprime la dirección de memoria del array, **no** los valores. Siempre recorrer con un bucle.  
+> El parámetro VarArgs debe ser el **último** de la firma del método.
+
+---
+
+## 24. POO — Clases Abstractas
+
+### `Abstracta.java` — `abstract class` y métodos abstractos
+Una **clase abstracta** es un molde incompleto: define la estructura pero deja que las subclases implementen los detalles. No se puede instanciar directamente.
+
+**Reglas clave:**
+1. No se pueden crear objetos de la clase abstracta con `new`.
+2. Los métodos abstractos **no tienen cuerpo** (sin `{}`); las subclases están obligadas a implementarlos.
+3. Puede tener un constructor, pero solo lo invoca una subclase (vía `super()`).
+4. Si un método o atributo es `abstract`, la clase debe declararse `abstract`.
+
+```java
+abstract class Animal {
+    // Sin implementación → las subclases DEBEN sobreescribirlo
+    public abstract void hacerSonidos();
+
+    // Método concreto → las subclases lo heredan tal cual
+    public void dormir() {
+        System.out.println("Este animal duerme");
+    }
+}
+
+class Perro extends Animal {
+    @Override
+    public void hacerSonidos() {
+        System.out.println("El perro ladra");
+    }
+}
+
+class Gato extends Animal {
+    @Override
+    public void hacerSonidos() {
+        System.out.println("El gato maulla");
+    }
+}
+```
+
+> `@Override` es opcional pero recomendado: el compilador verifica que la firma del método coincida exactamente con la de la clase padre, evitando errores silenciosos si la firma cambia.
+
+---
+
+## 25. Excepciones
+
+Las **excepciones** son errores que ocurren en tiempo de ejecución. Java permite capturarlos con `try / catch / finally` para que el programa no se caiga abruptamente.
+
+### `Try_Catch_Finally.java` — Estructura básica
+```java
+try {
+    int[] valores = new int[3];
+    valores[5] = 10; // lanza ArrayIndexOutOfBoundsException
+    System.out.println("Sigo adelante"); // nunca se ejecuta si hay error arriba
+} catch (ArrayIndexOutOfBoundsException error) {
+    System.out.println("Error: " + error);
+} finally {
+    // Se ejecuta SIEMPRE, haya error o no
+    System.out.println("Fin del programa");
+}
+```
+> Usar `finally` cuando necesitás garantizar que cierto código corra sin importar si hubo excepción (ej.: cerrar una conexión, liberar recursos).
+
+### `DivisionCero.java` — `ArithmeticException`
+Captura el intento de dividir un entero por cero.
+```java
+try {
+    int resultado = valor1 / valor2;
+} catch (ArithmeticException e) {
+    System.out.println("No se puede dividir entre cero.");
+}
+```
+
+### `ErrorEntero.java` — `InputMismatchException` con reintento
+Valida que el usuario ingrese un número entero. Si escribe texto, limpia el `Scanner` y vuelve a pedir.
+```java
+while (!control) {
+    try {
+        valor1 = entrada.nextInt();
+        valor2 = entrada.nextInt();
+        control = true;
+    } catch (InputMismatchException error) {
+        System.out.println("Error: Un valor ingresado no es entero");
+        entrada.nextLine(); // limpia el buffer del Scanner
+    }
+}
+```
+> Sin `entrada.nextLine()` en el `catch`, el valor inválido queda en el buffer y el `while` entra en bucle infinito.
+
+### `ErrorTexto.java` — `NumberFormatException`
+Captura el error al convertir un `String` que no es numérico con `Integer.parseInt()`.
+```java
+try {
+    int numero = Integer.parseInt(cantidad);
+} catch (NumberFormatException e) {
+    System.out.println("El valor no es una cantidad numérica.");
+}
+```
+
+### `MultiExcepciones.java` — Múltiples bloques `catch`
+Se pueden encadenar varios `catch` para manejar distintos tipos de error de forma diferenciada.
+```java
+try {
+    String texto = "Saludos";
+    System.out.println(texto.length());
+    int[] numeros = new int[5];
+    System.out.println(numeros[7]); // lanza ArrayIndexOutOfBoundsException
+} catch (NullPointerException e) {
+    System.out.println("Error: El texto tiene valor null");
+} catch (ArrayIndexOutOfBoundsException e) {
+    System.out.println("Error: Este elemento no existe");
+}
+```
+> Java evalúa los `catch` **en orden**: el primero que coincida con el tipo de excepción es el que se ejecuta. Colocar excepciones más específicas antes que las genéricas.
 
 ---
 
