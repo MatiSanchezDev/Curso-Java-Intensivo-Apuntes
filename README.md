@@ -26,9 +26,11 @@ src/
 │   ├── Inmutabilidad/    # Persona
 │   ├── Herencia/         # Vehiculo, Principal
 │   ├── Polimorfismo/     # Animal, Principal
-│   └── Abstracta/        # Abstracta
+│   ├── Abstracta/        # Abstracta
+│   └── Interfaces/       # Principal
 ├── Recursividad/         # Factorial
 ├── excepciones/          # DivisionCero, ErrorEntero, ErrorTexto, MultiExcepciones, Try_Catch_Finally
+├── Lista/                # ListaEnteros, ListaEnlazadas, ListasGenericas
 ├── Practicas/
 │   └── Cajero/           # Cajero
 └── UML_Proyect_Umbrello/ # Automovil, Motor, Persona, Ruedas
@@ -65,6 +67,8 @@ src/
 | 23 | [Métodos VarArgs](#23-métodos-varargs) | `MetodoVarArgs` |
 | 24 | [POO — Clases Abstractas](#24-poo--clases-abstractas) | `Abstracta` |
 | 25 | [Excepciones](#25-excepciones) | `DivisionCero`, `ErrorEntero`, `ErrorTexto`, `MultiExcepciones`, `Try_Catch_Finally` |
+| 26 | [POO — Interfaces](#26-poo--interfaces) | `Principal` |
+| 27 | [Listas](#27-listas) | `ListaEnteros`, `ListaEnlazadas`, `ListasGenericas` |
 
 ---
 
@@ -1067,6 +1071,140 @@ try {
 }
 ```
 > Java evalúa los `catch` **en orden**: el primero que coincida con el tipo de excepción es el que se ejecuta. Colocar excepciones más específicas antes que las genéricas.
+
+---
+
+## 26. POO — Interfaces
+
+### `Principal.java` — Definición e implementación de interfaces
+Una **interfaz** es un contrato que define qué métodos debe implementar una clase, sin especificar cómo. Todos sus atributos son constantes (`final`) y todos sus métodos son implícitamente abstractos.
+
+**Reglas clave:**
+1. Los atributos de una interfaz son **siempre constantes** (no se pueden modificar).
+2. Los métodos no tienen cuerpo: solo definen la firma que las clases deben implementar.
+3. Una clase puede implementar **múltiples interfaces** (a diferencia de la herencia, que es simple).
+4. Al implementar una interfaz, es **obligatorio** sobreescribir todos sus métodos.
+
+```java
+interface Animal {
+    String nombre = "Willy"; // constante — no se puede cambiar
+    int peso = 2000;
+
+    void sonido();  // abstracto
+    void moverse(); // abstracto
+}
+
+interface Animal2 {
+    void comer();
+}
+
+// Ballena implementa AMBAS interfaces
+class Ballena implements Animal, Animal2 {
+    @Override
+    public void sonido() {
+        System.out.println("Nombre: " + nombre);
+        System.out.println("La ballena canta.");
+    }
+
+    public void moverse() {
+        System.out.println("La ballena nada.");
+    }
+
+    public void comer() {
+        System.out.println("La ballena come peces pequeños.");
+    }
+}
+```
+
+> **Interfaz vs Clase Abstracta:** una clase abstracta puede tener métodos concretos y atributos de instancia; una interfaz solo define el contrato (métodos sin cuerpo y constantes). Usar interfaz cuando querés definir un comportamiento que múltiples clases no relacionadas deben cumplir.
+
+---
+
+## 27. Listas
+
+Las **listas** son estructuras de datos dinámicas del paquete `java.util` que crecen y encogen automáticamente, a diferencia de los arrays cuyo tamaño es fijo.
+
+### `ListaEnteros.java` — `ArrayList` de enteros
+`ArrayList` es la lista más usada en Java: acceso por índice en O(1), inserciones al final eficientes.
+
+```java
+ArrayList<Integer> valores = new ArrayList<>();
+
+// Agregar al final
+valores.add(12);
+
+// Agregar en posición específica
+valores.add(1, 70);
+
+// Modificar un elemento
+valores.set(1, 60);
+
+// Consultar
+valores.size();          // cantidad de elementos
+valores.get(3);          // elemento en posición 3
+valores.getFirst();      // primer elemento
+valores.getLast();       // último elemento
+valores.contains(20);    // buscar valor → true/false
+valores.indexOf(20);     // índice del valor
+
+// Eliminar
+valores.remove(2);       // por índice
+valores.removeFirst();
+valores.removeLast();
+
+// Ordenar
+Collections.reverse(valores); // mayor a menor
+Collections.sort(valores);    // menor a mayor
+
+// Recorrer
+for (Object i : valores) {
+    System.out.println(i);
+}
+```
+
+---
+
+### `ListaEnlazadas.java` — `LinkedList` de Strings
+`LinkedList` es una lista doblemente enlazada. Más eficiente para inserciones/eliminaciones en el medio de la lista; acceso por índice más lento que `ArrayList`.
+
+```java
+LinkedList<String> frutas = new LinkedList<>();
+frutas.add("Manzana");
+frutas.add("Banana");
+
+// Agregar / remover / sustituir por índice
+frutas.add(3, "Kiwis");
+frutas.remove(3);
+frutas.set(3, "Sandía");
+
+// Ordenar
+Collections.sort(frutas);    // A-Z
+Collections.reverse(frutas); // Z-A
+
+frutas.size(); // tamaño de la lista
+```
+
+> **`ArrayList` vs `LinkedList`:** preferir `ArrayList` para lectura frecuente por índice; `LinkedList` cuando las inserciones/eliminaciones en el medio son más frecuentes que el acceso aleatorio.
+
+---
+
+### `ListasGenericas.java` — `ArrayList` sin tipo (raw)
+Un `ArrayList` sin tipo genérico acepta cualquier tipo de objeto (`Object`). No es recomendable en código moderno porque pierde verificación de tipos en compilación.
+
+```java
+ArrayList objetos = new ArrayList(); // sin tipo genérico
+
+objetos.add("Hola");   // String
+objetos.add(200);      // Integer
+objetos.add(254.4);    // Double
+objetos.add(true);     // Boolean
+
+for (Object i : objetos) {
+    System.out.println(i);
+}
+```
+
+> Siempre preferir `ArrayList<TipoEspecífico>` sobre el raw `ArrayList` para aprovechar el sistema de tipos de Java y evitar `ClassCastException` en runtime.
 
 ---
 
