@@ -30,7 +30,9 @@ src/
 │   └── Interfaces/       # Principal
 ├── Recursividad/         # Factorial
 ├── excepciones/          # DivisionCero, ErrorEntero, ErrorTexto, MultiExcepciones, Try_Catch_Finally
-├── Lista/                # ListaEnteros, ListaEnlazadas, ListasGenericas
+├── Lista/                # ListaEnteros, ListaEnlazadas, ListasGenericas, SetElementos
+├── Manejo_Archivos/      # CrearArchivos, LeerArchivos, EscribirArchivos, BorrarArchivos, Informacion
+├── Concurrencia_Hilos/   # Procesos, Paralelos, Interface_Runnable, HilosEstado
 ├── Practicas/
 │   └── Cajero/           # Cajero
 └── UML_Proyect_Umbrello/ # Automovil, Motor, Persona, Ruedas
@@ -69,6 +71,9 @@ src/
 | 25 | [Excepciones](#25-excepciones) | `DivisionCero`, `ErrorEntero`, `ErrorTexto`, `MultiExcepciones`, `Try_Catch_Finally` |
 | 26 | [POO — Interfaces](#26-poo--interfaces) | `Principal` |
 | 27 | [Listas](#27-listas) | `ListaEnteros`, `ListaEnlazadas`, `ListasGenericas` |
+| 28 | [Sets](#28-sets) | `SetElementos` |
+| 29 | [Manejo de Archivos](#29-manejo-de-archivos) | `CrearArchivos`, `LeerArchivos`, `EscribirArchivos`, `BorrarArchivos`, `Informacion` |
+| 30 | [Concurrencia e Hilos](#30-concurrencia-e-hilos) | `Procesos`, `Paralelos`, `Interface_Runnable`, `HilosEstado` |
 
 ---
 
@@ -1205,6 +1210,248 @@ for (Object i : objetos) {
 ```
 
 > Siempre preferir `ArrayList<TipoEspecífico>` sobre el raw `ArrayList` para aprovechar el sistema de tipos de Java y evitar `ClassCastException` en runtime.
+
+---
+
+## 28. Sets
+
+Los **Sets** son colecciones que **no permiten elementos duplicados**. Pertenecen al paquete `java.util` e implementan la interfaz `Set`.
+
+### `SetElementos.java` — `HashSet`, `LinkedHashSet` y `TreeSet`
+
+| Implementación | Orden | Duplicados | Uso típico |
+|---------------|-------|-----------|-----------|
+| `HashSet` | Sin orden garantizado | No | Búsqueda rápida, orden no importa |
+| `LinkedHashSet` | Orden de inserción | No | Cuando importa el orden en que se insertó |
+| `TreeSet` | Orden natural (A-Z / numérico) | No | Cuando se necesita ordenación automática |
+
+```java
+Set<String> lenguajes = new TreeSet<>();
+
+lenguajes.add("Java");
+lenguajes.add("Java");       // duplicado — ignorado
+lenguajes.add("Python");
+lenguajes.add("C#");
+lenguajes.add("JavaScript");
+
+System.out.println(lenguajes); // [C#, Java, JavaScript, Python] — ordenado A-Z
+```
+
+> Si se usa `HashSet`, el orden de impresión no es predecible. `TreeSet` ordena automáticamente usando el orden natural del tipo (alfabético para Strings, numérico para enteros).
+
+---
+
+## 29. Manejo de Archivos
+
+Java gestiona archivos con la clase `File` del paquete `java.io`. Las operaciones de escritura y lectura usan `FileWriter` y `Scanner` respectivamente.
+
+### `CrearArchivos.java` — Crear un archivo con `File`
+```java
+File archivo = new File("ejemplo2.txt");
+
+if (archivo.exists()) {
+    System.out.println("El archivo ya existe");
+} else {
+    try {
+        boolean creado = archivo.createNewFile();
+        if (creado) {
+            System.out.println("Archivo creado: " + archivo.getName());
+        }
+    } catch (IOException error) {
+        System.out.println("ERROR: " + error);
+    }
+}
+```
+> `createNewFile()` retorna `true` si el archivo fue creado, `false` si ya existía. Lanza `IOException` si no tiene permisos o la ruta no existe.
+
+---
+
+### `EscribirArchivos.java` — Escribir con `FileWriter`
+```java
+FileWriter escribir = new FileWriter("ejemplo1.txt");
+// new FileWriter("ejemplo1.txt", true) → agrega al final en vez de sobreescribir
+
+escribir.write("Saludos a todos\n");
+escribir.write("Saludos a todas");
+escribir.close(); // siempre cerrar para guardar los cambios
+```
+> Sin el segundo parámetro `true`, cada llamada a `new FileWriter(...)` **sobreescribe** el archivo desde cero. Con `true` (modo append), el contenido nuevo se agrega al final.
+
+---
+
+### `LeerArchivos.java` — Leer con `Scanner`
+```java
+File archivo = new File("ejemplo1.txt");
+Scanner lector = new Scanner(archivo);
+
+while (lector.hasNextLine()) {
+    String linea = lector.nextLine();
+    System.out.println(linea);
+}
+lector.close(); // libera los recursos del sistema
+```
+> `hasNextLine()` devuelve `true` mientras haya más líneas. Siempre llamar `lector.close()` al terminar para liberar recursos.
+
+---
+
+### `BorrarArchivos.java` — Eliminar con `File.delete()`
+```java
+File archivo = new File("ejemplo2.txt");
+
+if (archivo.delete()) {
+    System.out.println("Archivo borrado: " + archivo.getName());
+} else {
+    System.out.println("No se pudo borrar el archivo");
+}
+```
+> `delete()` retorna `false` si el archivo no existe, está en uso, o no hay permisos suficientes.
+
+---
+
+### `Informacion.java` — Metadatos con `File`
+
+| Método | Descripción |
+|--------|-------------|
+| `getName()` | Nombre del archivo |
+| `getPath()` | Ruta relativa o absoluta |
+| `canRead()` | Si puede leerse |
+| `canWrite()` | Si puede escribirse |
+| `canExecute()` | Si puede ejecutarse |
+| `length()` | Tamaño en bytes |
+| `isDirectory()` | Si es una carpeta |
+| `isFile()` | Si es un archivo |
+| `lastModified()` | Timestamp de última modificación |
+
+```java
+File infoArchivo = new File("ruta/al/archivo.txt");
+
+if (infoArchivo.exists()) {
+    System.out.println("Nombre: " + infoArchivo.getName());
+    System.out.println("Tamaño: " + infoArchivo.length() + " bytes");
+
+    // Formatear la fecha de modificación
+    SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+    System.out.println("Modificado: " + fmt.format(infoArchivo.lastModified()));
+}
+```
+
+---
+
+## 30. Concurrencia e Hilos
+
+Un **hilo** (thread) es la unidad más pequeña de ejecución dentro de un proceso. Java permite ejecutar múltiples hilos en paralelo, aprovechando los núcleos del procesador.
+
+**Ciclo de vida de un hilo:**
+```
+NEW → RUNNABLE → (BLOCKED / WAITING / TIMED_WAITING) → TERMINATED
+```
+
+### `Procesos.java` — Crear un hilo extendiendo `Thread`
+La forma más directa: extender `Thread` y sobreescribir el método `run()`.
+```java
+class Proceso1 extends Thread {
+    public void run() {
+        System.out.println("Analizando datos...");
+        try {
+            Thread.sleep(3000); // pausa el hilo N milisegundos
+        } catch (InterruptedException error) {
+            System.out.println(error);
+        }
+        System.out.println("Carga finalizada");
+    }
+}
+
+Proceso1 hilo1 = new Proceso1();
+hilo1.start(); // inicia el hilo (llama a run() en un nuevo hilo)
+```
+> Llamar a `run()` directamente **no** crea un nuevo hilo; solo ejecuta el método en el hilo actual. Siempre usar `start()`.
+
+---
+
+### `Paralelos.java` — Dos hilos corriendo simultáneamente
+```java
+class Saludar extends Thread {
+    public void run() {
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Saludos a todos");
+        }
+    }
+}
+
+class Despedir extends Thread {
+    public void run() {
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Adios a todos");
+        }
+    }
+}
+
+Saludar saludo     = new Saludar();
+Despedir despedida = new Despedir();
+saludo.start();    // ambos corren en paralelo
+despedida.start();
+```
+> El **orden de salida no está garantizado**: el scheduler del sistema operativo decide cuándo ejecutar cada hilo.
+
+---
+
+### `Interface_Runnable.java` — Implementar `Runnable` (alternativa a `extends Thread`)
+Cuando la clase ya extiende otra clase padre, no puede extender `Thread` también (Java no tiene herencia múltiple). La solución es implementar la interfaz `Runnable`.
+
+```java
+class ClaseBase {
+    public void InitThread()    { System.out.println("Inicializando..."); }
+    public void LoadingThread() { System.out.println("Cargando..."); }
+    public void FinishThread()  { System.out.println("Finalizado."); }
+}
+
+// Extiende ClaseBase E implementa Runnable → soluciona la limitación de herencia simple
+class Mensaje extends ClaseBase implements Runnable {
+    public void run() {
+        super.InitThread();
+        Thread.sleep(3000);
+        super.LoadingThread();
+        Thread.sleep(3000);
+        super.FinishThread();
+    }
+}
+
+Mensaje objeto1 = new Mensaje();
+Thread hilo = new Thread(objeto1); // se envuelve en Thread
+hilo.start();
+```
+> **`extends Thread` vs `implements Runnable`:** usar `Runnable` es más flexible porque la clase puede seguir heredando de otra. `Runnable` es la práctica recomendada en código moderno.
+
+---
+
+### `HilosEstado.java` — Ciclo de vida y método `join()`
+Demuestra cómo inspeccionar el estado de un hilo en cada etapa y cómo usar `join()` para esperar que termine.
+
+```java
+HilosMonitor hilo = new HilosMonitor();
+System.out.println(hilo.getState()); // NEW
+
+hilo.start();
+System.out.println(hilo.getState()); // RUNNABLE
+
+Thread.sleep(3000);
+System.out.println(hilo.getState()); // TIMED_WAITING (por el sleep interno)
+
+hilo.join(); // el hilo principal espera a que termine HilosMonitor
+System.out.println(hilo.getState()); // TERMINATED
+```
+
+**Estados del ciclo de vida:**
+| Estado | Descripción |
+|--------|-------------|
+| `NEW` | Hilo instanciado pero sin iniciar (`start()` no llamado) |
+| `RUNNABLE` | Ejecutándose o listo para ejecutarse |
+| `TIMED_WAITING` | Pausado por tiempo definido (`Thread.sleep(ms)`) |
+| `WAITING` | Esperando indefinidamente a otra acción (`join()` sin timeout) |
+| `BLOCKED` | Esperando un lock de sincronización |
+| `TERMINATED` | Finalizó la ejecución de `run()` |
+
+> `join()` hace que el hilo que lo llama (por ejemplo `main`) se **bloquee** hasta que el hilo objetivo termine. Útil para encadenar hilos en secuencia garantizada.
 
 ---
 
